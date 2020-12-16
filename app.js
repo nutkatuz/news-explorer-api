@@ -18,8 +18,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 // подключаем мидлвары, роуты и всё остальное...
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // нет сторонним пакетам!
-
+app.use(express.json());
 app.use(cors());
 app.use(requestLogger);
 // за ним идут все обработчики роутов

@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const jwtSign = require('../helpers/jwt-sign');
 const NotFoundError = require('../errors/NotFoundError');
-// const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
 
 const getCurrentUser = (req, res, next) => {
@@ -29,7 +28,6 @@ const createUser = (req, res, next) => {
         return next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
       }
       return bcrypt.hash(password, 10);
-
     })
     .then((hash) => User.create({ email, password: hash })
       .then(({ _id }) => res.status(200).send({ email, _id })))
@@ -39,7 +37,7 @@ const createUser = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
-    .then((user) => { // проверка в модели
+    .then((user) => { // +проверка в модели
       const token = jwtSign(user);
       res.send({ token });
     })

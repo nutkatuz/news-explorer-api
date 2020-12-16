@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
@@ -24,30 +25,26 @@ const articleSchema = new mongoose.Schema({
   },
   link: {
     type: String,
-    validate: {
-      validator(v) {
-        return /^https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.#?/i.test(v);
-      },
-    },
-    message: (props) => `A ссылка ${props.value} - невалидна!`,
     required: true,
+    validate: {
+      validator: (url) => validator.isURL(url),
+      message: (props) => `Невалидная ссылка на картинку: ${props.value}`,
+    },
   },
   image: {
     type: String,
+    required: [true, 'Нет ссылки на иллюстрацию к статье'],
     validate: {
-      validator(v) {
-        return /^https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.#?/i.test(v);
-      },
+      validator: (url) => validator.isURL(url),
+      message: (props) => `Невалидная ссылка на картинку: ${props.value}`,
     },
-    message: (props) => `A ссылка ${props.value} - невалидна!`,
-    required: true,
   },
   owner: {
     type: mongoose.Types.ObjectId,
     ref: 'user',
-    required: true,
+    required: [true, 'Нет пользователя, сохранившего статью'],
     select: false,
   },
-});
+}, { versionKey: false }); // строка с вебинара
 
-module.exports = mongoose.model('articleModel', articleSchema);
+module.exports = mongoose.model('article', articleSchema);
