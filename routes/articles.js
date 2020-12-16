@@ -5,7 +5,7 @@ const {
   postArticle, // создаёт статью с переданными в теле
   // keyword, title, text, date, source, link и image
   deleteArticle, // удаляет сохранённую статью  по _id
-} = require('../controllers/cards.js');
+} = require('../controllers/articles.js');
 
 articleRouter.get('/articles', getArticles);
 
