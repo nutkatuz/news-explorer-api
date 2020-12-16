@@ -27,7 +27,14 @@ const postArticle = (req, res, next) => {
     image,
   } = req.body;
   Article.create({
-    keyword, title, text, date, source, link, image, owner: ownerId,
+    keyword,
+    title,
+    text,
+    date,
+    source,
+    link,
+    image,
+    owner: ownerId,
   }).then((card) => res.status(201).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
