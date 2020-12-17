@@ -1,25 +1,14 @@
 const articleRouter = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
+const celebrateValid = require('../middlewares/celebrateValid');
+
 const {
   getArticles, // возвращает все сохранённые пользователем статьи
-  postArticle, // создаёт статью с переданными в теле
-  // keyword, title, text, date, source, link и image
-  deleteArticle, // удаляет сохранённую статью  по _id
+  postArticle,
+  deleteArticle,
 } = require('../controllers/articles.js');
 
 articleRouter.get('/articles', getArticles);
-
-articleRouter.post('/articles', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().regex(/^http[s]?:\/\/\w+/),
-  }),
-}), postArticle);
-
-articleRouter.delete('/articles/:_id', celebrate({
-  params: Joi.object().keys({
-    _id: Joi.string().hex(),
-  }),
-}), deleteArticle);
+articleRouter.post('/articles', celebrateValid.postArticle, postArticle);
+articleRouter.delete('/articles/:_id', celebrateValid.deleteArticle, deleteArticle);
 
 module.exports = articleRouter;
