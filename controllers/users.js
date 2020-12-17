@@ -1,15 +1,22 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const jwtSign = require('../helpers/jwt-sign');
+const errors = require('../errors/errors');
 const NotFoundError = require('../errors/NotFoundError');
+const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
+
+const saltRounds = 10;
 
 const getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
   return User.findOne({ _id })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
+        throw new NotFoundError('Нет такого пользователя');
+        // throw new NotFoundError(errors.noUser);
+      // } else if (err.kind === 'ObjectId') {
+      //   throw new ValidationError(errors.notValidUserId);
       }
       res.status(200).send(user);
     })
@@ -18,16 +25,16 @@ const getCurrentUser = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    throw new ConflictError({ message: 'не заполнены поля формы регистрации' });
+  if (!email) { // пароль в мидлваре проверяем
+    throw new ValidationError(errors.noEmail);
   }
   User
     .findOne({ email })
     .then((user) => {
       if (user) {
-        return next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
+        return next(new ConflictError(errors.conflictEmail));
       }
-      return bcrypt.hash(password, 10);
+      return bcrypt.hash(password, saltRounds);
     })
     .then((hash) => User.create({ email, password: hash })
       .then(({ _id }) => res.status(200).send({ email, _id })))

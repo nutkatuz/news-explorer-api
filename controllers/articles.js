@@ -1,4 +1,5 @@
 const Article = require('../models/article');
+const errors = require('../errors/errors');
 const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
 const ForbiddenError = require('../errors/ForbiddenError');
@@ -49,9 +50,9 @@ const deleteArticle = async (req, res, next) => {
     const currentUser = req.user._id;
     const cardToCompare = await Article.findById(req.params._id);
     if (!cardToCompare) {
-      throw new NotFoundError('А такой карточки у нас нет в нашей базе данных ');
+      throw new NotFoundError(errors.noArticle);
     } else if (currentUser !== cardToCompare.owner.toString()) {
-      throw new ForbiddenError('Нет прав на удаление ');
+      throw new ForbiddenError(errors.forbidden);
     }
     const newCard = await Article.findByIdAndRemove(req.params._id);
     res.status(200).send(newCard);
@@ -73,7 +74,7 @@ const getArticleById = (req, res, next) => {
 
 const likeArticle = (req, res, next) => {
   Article.findByIdAndUpdate(req.params._id, { $addToSet: { likes: req.user._id } }, { new: true })
-    .orFail(new NotFoundError('Нет заметки с таким id'))
+    .orFail(new NotFoundError(errors.noArticle))
     .then((card) => {
       res.send(card);
     })
@@ -86,7 +87,7 @@ const dislikeArticle = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(new NotFoundError('Нет заметки с таким id'))
+    .orFail(new NotFoundError(errors.noArticle))
     .then((cards) => {
       res.send(cards);
     })
@@ -96,7 +97,7 @@ const dislikeArticle = (req, res, next) => {
 module.exports = {
   getArticles,
   postArticle,
-  deleteArticle, //
+  deleteArticle,
   getArticleById,
   likeArticle,
   dislikeArticle,
