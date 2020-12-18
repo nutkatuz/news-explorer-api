@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 
 const PORT = 3000;
 const app = express();
@@ -6,6 +7,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const { errors } = require('celebrate');
+const limiter = require('./middlewares/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes/index.js');
 
@@ -19,6 +21,8 @@ mongoose.connect('mongodb://localhost:27017/news', {
 // подключаем мидлвары, роуты и всё остальное...
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(helmet());
+app.use(limiter);
 app.use(cors());
 app.use(requestLogger);
 
