@@ -1,4 +1,4 @@
-const centralizeError = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   if (err.status) {
     res.status(err.status).send({ message: err.message });
     return;
@@ -7,4 +7,4 @@ const centralizeError = (err, req, res, next) => {
   next();
 };
 
-module.exports = centralizeError;
+module.exports = errorHandler;
