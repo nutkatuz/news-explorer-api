@@ -37,8 +37,8 @@ app.use((err, req, res, next) => {
     return;
   }
   res.status(500).send({ message: err.message });
-  next(); // дальше нет ничего
-});
+  next();
+}); // дальше нет ничего
 
 // eslint-disable-next-line no-console
 app.listen(PORT, () => console.log(`App listening on port ${PORT}..`));
