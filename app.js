@@ -10,6 +10,7 @@ const { errors } = require('celebrate');
 const limiter = require('./middlewares/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes/index.js');
+const centralizeError = require('./routes/index.js');
 
 // подключаемся к серверу mongo
 mongoose.connect('mongodb://localhost:27017/news', {
@@ -30,15 +31,7 @@ app.use(requestLogger);
 app.use('/', routes); // защита роутов - в общем файле для роутов
 app.use(errorLogger); // подключаем логгер ошибок
 app.use(errors()); // обработчик ошибок celebrate
-// централизованный обработчик ошибок
-app.use((err, req, res, next) => {
-  if (err.status) {
-    res.status(err.status).send({ message: err.message });
-    return;
-  }
-  res.status(500).send({ message: err.message });
-  next();
-}); // дальше нет ничего
+app.use(centralizeError()); // централизованный обработчик ошибок. дальше нет ничего
 
 // eslint-disable-next-line no-console
 app.listen(PORT, () => console.log(`App listening on port ${PORT}..`));
