@@ -7,7 +7,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/rateLimiter');
 const errorHandler = require('./middlewares/handleErrors');
 const routes = require('./routes/index.js');
-const mongoUrl = require('./helpers/devConsts');
+const { mongoUrl } = require('./helpers/devConsts');
+
 require('dotenv').config();
 
 const app = express();
