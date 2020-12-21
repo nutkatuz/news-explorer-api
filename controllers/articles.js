@@ -6,9 +6,9 @@ const ForbiddenError = require('../errors/ForbiddenError');
 
 const getArticles = async (req, res, next) => {
   try {
-    const articles = await Article.find({});
+    const articles = await Article.find({}).populate('user');
     if (!articles) {
-      throw new ValidationError('Ошибка на сервере при поиске карточек');
+      throw new ValidationError('Нет сохранённых статей');
     }
     res.status(200).send(articles);
   } catch (err) {
@@ -17,7 +17,6 @@ const getArticles = async (req, res, next) => {
 };
 
 const postArticle = (req, res, next) => {
-  const ownerId = req.user._id;
   const {
     keyword,
     title,
@@ -35,8 +34,12 @@ const postArticle = (req, res, next) => {
     source,
     link,
     image,
-    owner: ownerId,
-  }).then((card) => res.status(201).send(card))
+    owner: req.user._id,
+  }).then((article) => {
+    const data = article.toJSON();
+    delete data.owner;
+    res.status(201).send(data);
+  })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new ValidationError(`${Object.values(err.errors).map((error) => error.message).join('!!! ')}`);
@@ -48,14 +51,15 @@ const postArticle = (req, res, next) => {
 const deleteArticle = async (req, res, next) => {
   try {
     const currentUser = req.user._id;
-    const cardToCompare = await Article.findById(req.params._id);
+    const cardToCompare = await Article.findById(req.params._id).select('+owner');
+    // использовать метод populate, чтобы свойство owner возвращалось в контроллере базой
     if (!cardToCompare) {
       throw new NotFoundError(errors.noArticle);
     } else if (currentUser !== cardToCompare.owner.toString()) {
-      throw new ForbiddenError(errors.forbidden);
+      throw new ForbiddenError(cardToCompare);
     }
-    const newCard = await Article.findByIdAndRemove(req.params._id);
-    res.status(200).send(newCard);
+    const article = await Article.findByIdAndRemove(req.params._id);
+    res.status(200).send(article);
   } catch (err) {
     next(err);
   }
