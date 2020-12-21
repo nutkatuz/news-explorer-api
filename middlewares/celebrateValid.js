@@ -1,20 +1,23 @@
 const { celebrate, Joi } = require('celebrate');
 const { default: validator } = require('validator');
 const errors = require('../errors/errors');
-// const isURL = require('validator/lib/isURL');
 
 const signup = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email()
+    email: Joi.string().required().trim().email()
       .message(errors.invalEmail)
       .messages({
+        'string.empty': errors.noEmail,
         'any.required': errors.noEmail,
       }),
-    password: Joi.string().required().min(8).messages({
-      'any.required': errors.noPassword, // почему-то переопределяет только при null, а не ""
-      'string.min': errors.minPassword,
-    }),
-    name: Joi.string().required().messages({
+    password: Joi.string().required().trim().min(8)
+      .messages({
+        'string.empty': errors.noPassword,
+        'any.required': errors.noPassword,
+        'string.min': errors.minPassword,
+      }),
+    name: Joi.string().required().trim().messages({
+      'string.empty': errors.noName,
       'any.required': errors.noName,
     }),
   }),
@@ -23,12 +26,14 @@ const signup = celebrate({
 const signin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email().messages({
+      'string.empty': errors.noEmail,
       'any.required': errors.noEmail,
     }),
     password: Joi.string().required().trim().min(8)
       .messages({
+        'string.empty': errors.noPassword,
+        'any.required': errors.noPassword,
         'string.min': errors.minPassword,
-        'any.required': 'errors.noPassword',
       }),
   }),
 });
