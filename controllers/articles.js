@@ -6,11 +6,11 @@ const ForbiddenError = require('../errors/ForbiddenError');
 
 const getArticles = async (req, res, next) => {
   try {
-    const cards = await Article.find({});
-    if (!cards) {
-      throw new ValidationError('Ошибка на сервере при поиске карточек ');
+    const articles = await Article.find({});
+    if (!articles) {
+      throw new ValidationError('Ошибка на сервере при поиске карточек');
     }
-    res.status(200).send(cards);
+    res.status(200).send(articles);
   } catch (err) {
     next(err);
   }
@@ -39,8 +39,8 @@ const postArticle = (req, res, next) => {
   }).then((card) => res.status(201).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new ValidationError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`);
-      } // Ошибка на сервере при создании статьи, переданы некорректные данные! ${err}
+        throw new ValidationError(`${Object.values(err.errors).map((error) => error.message).join('!!! ')}`);
+      } // не работает
     })
     .catch(next);
 };

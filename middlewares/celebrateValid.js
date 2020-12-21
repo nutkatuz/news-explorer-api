@@ -1,16 +1,32 @@
 const { celebrate, Joi } = require('celebrate');
+const errors = require('../errors/errors');
 
 const signup = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    email: Joi.string().required().email()
+      .message('Поле "email" должно быть валидным email-адресом')
+      .messages({
+        'any.required': errors.noEmail,
+      }),
+    password: Joi.string().required().min(8).messages({
+      'any.required': errors.noPassword, // почему-то переопределяет только при null, а не ""
+      'string.min': errors.minPassword,
+    }),
+    name: Joi.string().required().messages({
+      'any.required': errors.noName,
+    }),
   }),
 });
 
 const signin = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    email: Joi.string().required().email().messages({
+      'any.required': errors.noEmail,
+    }),
+    password: Joi.string().required().min(8).messages({
+      'string.min': errors.minPassword,
+      'any.required': 'errors.noPassword',
+    }),
   }),
 });
 
