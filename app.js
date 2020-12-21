@@ -1,19 +1,20 @@
 const express = require('express');
-const helmet = require('helmet');
-
-const PORT = 3000;
-const app = express();
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const cors = require('cors');
-require('dotenv').config();
 const { errors } = require('celebrate');
-const limiter = require('./middlewares/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const limiter = require('./middlewares/rateLimiter');
 const errorHandler = require('./middlewares/handleErrors');
 const routes = require('./routes/index.js');
+const mongoUrl = require('./helpers/devConsts');
+require('dotenv').config();
+
+const app = express();
+const { PORT = 3000, MONGO_URL = mongoUrl } = process.env;
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/news', {
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -23,9 +24,9 @@ mongoose.connect('mongodb://localhost:27017/news', {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
-app.use(limiter);
 app.use(cors());
-app.use(requestLogger);
+app.use(requestLogger); // Запросы, отклонённые лимитером, будут добавлены в лог запросов
+app.use(limiter);
 app.use('/', routes); // защита роутов - в общем файле для роутов
 app.use(errorLogger); // подключаем логгер ошибок
 app.use(errors()); // обработчик ошибок celebrate

@@ -28,7 +28,7 @@ const articleSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (url) => validator.isURL(url),
-      message: (props) => `Неправильная ссылка на статью: ${props.value}`,
+      message: (props) => `запрос не соответствует схеме: Неправильная ссылка на статью: ${props.value}`,
     },
   },
   image: {
@@ -36,7 +36,7 @@ const articleSchema = new mongoose.Schema({
     required: [true, 'Нет ссылки на иллюстрацию к статье'],
     validate: {
       validator: (url) => validator.isURL(url),
-      message: (props) => `Неправильная ссылка на иллюстрацию к статье: ${props.value}`,
+      message: (props) => `запрос не соответствует схеме: Неправильная ссылка на иллюстрацию: ${props.value}`,
     },
   },
   owner: {

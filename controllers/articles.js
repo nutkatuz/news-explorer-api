@@ -8,9 +8,9 @@ const getArticles = async (req, res, next) => {
   try {
     const articles = await Article.find({}).populate('user');
     if (!articles) {
-      throw new ValidationError('Нет сохранённых статей');
+      throw new ValidationError(errors.noArticles);
     }
-    res.status(200).send(articles);
+    res.send(articles);
   } catch (err) {
     next(err);
   }
@@ -51,15 +51,14 @@ const postArticle = (req, res, next) => {
 const deleteArticle = async (req, res, next) => {
   try {
     const currentUser = req.user._id;
-    const cardToCompare = await Article.findById(req.params._id).select('+owner');
-    // использовать метод populate, чтобы свойство owner возвращалось в контроллере базой
-    if (!cardToCompare) {
+    const article = await Article.findById(req.params._id).select('+owner');
+    if (!article) {
       throw new NotFoundError(errors.noArticle);
-    } else if (currentUser !== cardToCompare.owner.toString()) {
-      throw new ForbiddenError(cardToCompare);
+    } else if (currentUser !== article.owner.toString()) {
+      throw new ForbiddenError(article);
     }
-    const article = await Article.findByIdAndRemove(req.params._id);
-    res.status(200).send(article);
+    article.remove();
+    res.send(article);
   } catch (err) {
     next(err);
   }
@@ -69,7 +68,7 @@ const getArticleById = (req, res, next) => {
   Article.findById(req.params._id)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Нет карточки с таким id');
+        throw new NotFoundError(errors.noArticle);
       }
       return res.send(card);
     })

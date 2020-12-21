@@ -1,6 +1,5 @@
 const noUser = 'Нет пользователя с таким id';
 const noResource = 'Запрашиваемый ресурс не найден';
-const noData = 'Не заполнены одно или несколько полей формы';
 const noName = 'Заполните графу "имя", пожалуйста';
 const noPassword = 'Заполните пароль, пожалуйста (не менее 8 символов)';
 const minPassword = 'Минимальная длина пароля - 8 символов';
@@ -12,11 +11,13 @@ const unauthorized = 'Нет прав доступа, пожалуйста, ав
 const noArticle = 'Нет заметки с таким id';
 const forbiddenDel = 'Нет прав на удаление';
 const noArticles = 'Не найдено ни одной карточки';
+const invalEmail = 'Поле "email" должно быть валидным email-адресом';
+const invalUrl = (value) => `Некорректная ссылка на "${value}"`;
+const joiMsg = (value) => `Не заполнено поле "${value}"`;
 
 module.exports = {
   noUser,
   noResource,
-  noData,
   conflictEmail,
   mismatch,
   unauthorizedEmail,
@@ -28,4 +29,7 @@ module.exports = {
   minPassword,
   noEmail,
   noName,
+  invalEmail,
+  invalUrl,
+  joiMsg,
 };
