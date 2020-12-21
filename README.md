@@ -36,6 +36,8 @@ api.nomore.students.nomoredomains.icu www.api.nomore.students.nomoredomains.icu
 
 
 // не используется
+.regex(/^http[s]?:\/\/\w+/)
+
 const ValidationError = require('../errors/ValidationError');
 const errors = require('../errors/errors');
 

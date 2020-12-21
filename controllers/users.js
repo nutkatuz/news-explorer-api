@@ -3,7 +3,6 @@ const User = require('../models/user');
 const jwtSign = require('../helpers/jwt-sign');
 const errors = require('../errors/errors');
 const NotFoundError = require('../errors/NotFoundError');
-const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
 
 const saltRounds = 10;
@@ -13,22 +12,15 @@ const getCurrentUser = (req, res, next) => {
   return User.findOne({ _id })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Нет такого пользователя');
-        // throw new NotFoundError(errors.noUser);
-      // } else if (err.kind === 'ObjectId') {
-      //   throw new ValidationError(errors.notValidUserId);
+        throw new NotFoundError(errors.noUser);
       }
-      res.status(200).send(user);
+      res.send(user);
     })
     .catch(next);
 };
 
 const createUser = (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password.trim()) { // Reviewer1234! теперь проводится
-    // "проверка полей - это не задача контроллера", я хотела как лучше...
-    throw new ValidationError(errors.noData);
-  }
   User
     .findOne({ email })
     .then((user) => {
@@ -38,7 +30,7 @@ const createUser = (req, res, next) => {
       return bcrypt.hash(password, saltRounds);
     })
     .then((hash) => User.create({ email, password: hash })
-      .then(({ _id }) => res.status(200).send({ email, _id })))
+      .then(({ _id }) => res.send({ email, _id })))
     .catch(next);
 };
 
