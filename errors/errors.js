@@ -1,10 +1,12 @@
 const noUser = 'Нет пользователя с таким id';
 const noResource = 'Запрашиваемый ресурс не найден';
 const noData = 'Не заполнены одно или несколько полей формы';
-const noPassword = 'Заполните пароль, не менее 8 символов';
+const noName = 'Заполните графу "имя", пожалуйста';
+const noPassword = 'Заполните пароль, пожалуйста (не менее 8 символов)';
+const minPassword = 'Минимальная длина пароля - 8 символов';
 const noEmail = 'Укажите почту, пожалуйста';
 const conflictEmail = 'Пользователь с таким email уже зарегистрирован';
-const mismatch = 'Неправильные почта или пароль';
+const mismatch = 'Неправильные почта или пароль, проверьте введённые данные';
 const unauthorizedEmail = 'Не зарегистрирован пользователь с таким email';
 const unauthorized = 'Нет прав доступа, пожалуйста, авторизуйтесь';
 const noArticle = 'Нет заметки с таким id';
@@ -23,5 +25,7 @@ module.exports = {
   forbidden,
   noArticles,
   noPassword,
+  minPassword,
   noEmail,
+  noName,
 };

@@ -29,7 +29,6 @@ const userSchema = new mongoose.Schema({
 });
 
 // Собственные методы моделей Mongoose для контроллера логина, 401
-// eslint-disable-next-line func-names
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
@@ -39,7 +38,7 @@ userSchema.statics.findUserByCredentials = function (email, password) {
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new UnauthorizedError(errors.unauthorized));
+            return Promise.reject(new UnauthorizedError(errors.mismatch));
           }
           return user; // теперь user доступен
         });

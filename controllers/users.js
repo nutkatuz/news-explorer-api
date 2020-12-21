@@ -25,8 +25,9 @@ const getCurrentUser = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const { email, password } = req.body;
-  if (!email) { // пароль в мидлваре проверяем
-    throw new ValidationError(errors.noEmail);
+  if (!email || !password.trim()) { // Reviewer1234! теперь проводится
+    // "проверка полей - это не задача контроллера", я хотела как лучше...
+    throw new ValidationError(errors.noData);
   }
   User
     .findOne({ email })
