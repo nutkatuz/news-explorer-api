@@ -10,7 +10,7 @@ const mismatch = 'Неправильные почта или пароль, пр�
 const unauthorizedEmail = 'Не зарегистрирован пользователь с таким email';
 const unauthorized = 'Нет прав доступа, пожалуйста, авторизуйтесь';
 const noArticle = 'Нет заметки с таким id';
-const forbidden = 'Нет прав на удаление';
+const forbiddenDel = 'Нет прав на удаление';
 const noArticles = 'Не найдено ни одной карточки';
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
   unauthorizedEmail,
   unauthorized,
   noArticle,
-  forbidden,
+  forbiddenDel,
   noArticles,
   noPassword,
   minPassword,
