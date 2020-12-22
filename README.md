@@ -37,7 +37,7 @@ api.nomore.students.nomoredomains.icu www.api.nomore.students.nomoredomains.icu
 
 // не используется
 .regex(/^http[s]?:\/\/\w+/)
-
+***
 const ValidationError = require('../errors/ValidationError');
 const errors = require('../errors/errors');
 
@@ -52,5 +52,10 @@ const checkPassword = (req, res, next) => {
 };
 
 module.exports = checkPassword;
-
+***
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw new ValidationError(`${Object.values(err.errors).map((error) => error.message).join('!!! ')}`);
+      } // не работает
+    })
  -->
