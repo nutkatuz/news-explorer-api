@@ -81,7 +81,7 @@ const postArticle = celebrate({
         'any.required': errors.joiMsg('ссылка на иллюстрацию'),
       }),
   }),
-});
+}, { abortEarly: false });
 
 const deleteArticle = celebrate({
   params: Joi.object().keys({
