@@ -20,7 +20,7 @@ const getCurrentUser = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
   User
     .findOne({ email })
     .then((user) => {
@@ -29,8 +29,8 @@ const createUser = (req, res, next) => {
       }
       return bcrypt.hash(password, saltRounds);
     })
-    .then((hash) => User.create({ email, password: hash })
-      .then(({ _id }) => res.send({ email, _id })))
+    .then((hash) => User.create({ email, password: hash, name })
+      .then(({ _id }) => res.send({ email, _id, name })))
     .catch(next);
 };
 
