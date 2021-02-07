@@ -20,20 +20,20 @@ const postArticle = (req, res, next) => {
   const {
     keyword,
     title,
-    text,
-    date,
+    description,
+    publishedAt,
     source,
-    link,
-    image,
+    url,
+    urlToImage,
   } = req.body;
   Article.create({
     keyword,
     title,
-    text,
-    date,
+    description,
+    publishedAt,
     source,
-    link,
-    image,
+    url,
+    urlToImage,
     owner: req.user._id,
   }).then((article) => {
     const data = article.toJSON();

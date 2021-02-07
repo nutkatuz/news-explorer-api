@@ -48,11 +48,11 @@ const postArticle = celebrate({
       'string.empty': errors.joiMsg('заголовок'),
       'any.required': errors.joiMsg('заголовок'),
     }),
-    text: Joi.string().required().trim().messages({
+    description: Joi.string().required().trim().messages({
       'string.empty': errors.joiMsg('текст статьи'),
       'any.required': errors.joiMsg('текст статьи'),
     }),
-    date: Joi.date().required().messages({
+    publishedAt: Joi.date().required().messages({
       'string.empty': errors.joiMsg('дата создания статьи'),
       'any.required': errors.joiMsg('дата создания статьи'),
     }),
@@ -60,7 +60,7 @@ const postArticle = celebrate({
       'string.empty': errors.joiMsg('источник статьи'),
       'any.required': errors.joiMsg('источник статьи'),
     }),
-    link: Joi.string().required().trim().custom((value, helpers) => {
+    url: Joi.string().required().trim().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
       }
@@ -70,7 +70,7 @@ const postArticle = celebrate({
         'string.empty': errors.joiMsg('ссылка на статью'),
         'any.required': errors.joiMsg('ссылка на статью'),
       }),
-    image: Joi.string().required().trim().custom((value, helpers) => {
+    urlToImage: Joi.string().required().trim().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
       }

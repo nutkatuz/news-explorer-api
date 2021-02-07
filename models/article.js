@@ -10,11 +10,11 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Нет заголовка статьи'],
   },
-  text: {
+  description: {
     type: String,
     required: [true, 'Нет текста статьи'],
   },
-  date: {
+  publishedAt: {
     type: Date,
     default: Date.now(),
     required: [true, 'Нет даты создания статьи'],
@@ -23,7 +23,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Не указан источник статьи'],
   },
-  link: {
+  url: {
     type: String,
     required: true,
     validate: {
@@ -31,7 +31,7 @@ const articleSchema = new mongoose.Schema({
       message: (props) => `запрос не соответствует схеме: Неправильная ссылка на статью: ${props.value}`,
     },
   },
-  image: {
+  urlToImage: {
     type: String,
     required: [true, 'Нет ссылки на иллюстрацию к статье'],
     validate: {
