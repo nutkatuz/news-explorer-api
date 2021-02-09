@@ -13,7 +13,7 @@ const { mongoUrl } = require('./helpers/devConsts');
 require('dotenv').config();
 
 const app = express();
-const { PORT = 3002, MONGO_URL = mongoUrl } = process.env;
+const { PORT = 3000, MONGO_URL = mongoUrl } = process.env;
 
 // подключаемся к серверу mongo
 mongoose.connect(MONGO_URL, {
