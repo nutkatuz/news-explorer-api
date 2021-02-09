@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "lint": "eslint **/*.js"
+    "lint": "eslint **/*.js",
+    "deploy": "scp -r ../news-explorer-api/* teslauser@178.154.228.91:/home/teslauser/news-explorer-api"
   },
   "repository": {
     "type": "git",

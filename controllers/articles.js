@@ -6,7 +6,8 @@ const ForbiddenError = require('../errors/ForbiddenError');
 
 const getArticles = async (req, res, next) => {
   try {
-    const articles = await Article.find({}).populate('user');
+    const owner = req.user._id;
+    const articles = await Article.find({ owner }).populate('user');
     if (!articles) {
       throw new ValidationError(errors.noArticles);
     }

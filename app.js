@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+// eslint-disable-next-line no-unused-vars
 const limiter = require('./middlewares/rateLimiter');
 const errorHandler = require('./middlewares/handleErrors');
 const routes = require('./routes/index.js');
@@ -12,7 +13,7 @@ const { mongoUrl } = require('./helpers/devConsts');
 require('dotenv').config();
 
 const app = express();
-const { PORT = 3000, MONGO_URL = mongoUrl } = process.env;
+const { PORT = 3002, MONGO_URL = mongoUrl } = process.env;
 
 // подключаемся к серверу mongo
 mongoose.connect(MONGO_URL, {
@@ -27,10 +28,11 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 app.use(requestLogger); // Запросы, отклонённые лимитером, будут добавлены в лог запросов
-app.use(limiter);
+// app.use(limiter);
 app.use('/', routes); // защита роутов - в общем файле для роутов
 app.use(errorLogger); // подключаем логгер ошибок
 app.use(errors()); // обработчик ошибок celebrate
 app.use(errorHandler); // централизованный обработчик ошибок. дальше нет ничего
 
+// eslint-disable-next-line no-console
 app.listen(PORT, () => console.log(`App listening on port ${PORT}..`));

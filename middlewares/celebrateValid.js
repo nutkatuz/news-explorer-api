@@ -28,6 +28,7 @@ const signin = celebrate({
     email: Joi.string().required().email().messages({
       'string.empty': errors.noEmail,
       'any.required': errors.noEmail,
+      // 'valid': 'jq',
     }),
     password: Joi.string().required().trim().min(8)
       .messages({
@@ -36,7 +37,7 @@ const signin = celebrate({
         'string.min': errors.minPassword,
       }),
   }),
-});
+}, { abortEarly: false });
 
 const postArticle = celebrate({
   body: Joi.object().keys({
