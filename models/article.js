@@ -26,10 +26,11 @@ const articleSchema = new mongoose.Schema({
   url: {
     type: String,
     required: true,
-    validate: {
-      validator: (url) => validator.isURL(url),
-      message: (props) => `запрос не соответствует схеме: Неправильная ссылка на статью: ${props.value}`,
-    },
+    // validate: {
+    //   validator: (url) => validator.isURL(url),
+    //   message: (props) =>
+    // `запрос не соответствует схеме: Неправильная ссылка на статью: ${props.value}`,
+    // },
   },
   urlToImage: {
     type: String,
